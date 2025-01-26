@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Badges</h1>
+<div class="row">
+    {% for badge in badges %}
+    <div class="col-md-3 mb-3">
+        <div class="card">
+            <img src="{{ badge.image.url }}" class="card-img-top" alt="{{ badge.name }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ badge.name }}</h5>
+                <p class="card-text">{{ badge.description }}</p>
+                <p>Points Required: {{ badge.points_required }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

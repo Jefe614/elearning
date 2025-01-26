@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* General container styling */
+    .register-container {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 25px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Heading styling */
+    .register-container h2 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    /* Input fields */
+    .register-container label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .register-container input[type="text"],
+    .register-container input[type="email"],
+    .register-container input[type="number"],
+    .register-container input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    .register-container input:focus {
+        border-color: #6a11cb;
+    }
+
+    /* Submit button */
+    .register-container button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1rem;
+        color: #fff;
+        background-color: #6a11cb;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .register-container button:hover {
+        background-color: #2575fc;
+    }
+</style>
+
+<div class="register-container">
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" required>
+
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" required>
+
+        <label for="grade_level">Grade Level</label>
+        <input type="number" name="grade_level" id="grade_level" min="1" max="12" required>
+
+        <label for="password1">Password</label>
+        <input type="password" name="password1" id="password1" required>
+
+        <label for="password2">Confirm Password</label>
+        <input type="password" name="password2" id="password2" required>
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+{% endblock %}

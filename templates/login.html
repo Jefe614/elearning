@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* General container styling */
+    .login-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Heading styling */
+    .login-container h2 {
+        text-align: center;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    /* Input fields */
+    .login-container label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    .login-container input[type="text"]:focus,
+    .login-container input[type="password"]:focus {
+        border-color: #6a11cb;
+    }
+
+    /* Submit button */
+    .login-container button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        color: #fff;
+        background-color: #6a11cb;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .login-container button:hover {
+        background-color: #2575fc;
+    }
+</style>
+
+<div class="login-container">
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" required>
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+{% endblock %}
