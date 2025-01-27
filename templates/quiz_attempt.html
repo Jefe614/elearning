@@ -1,15 +1,33 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ quiz.title }}</h1>
-<form method="post">
+<form method="POST">
     {% csrf_token %}
-    {% for field in form %}
-    <div class="mb-3">
-        <label class="form-label">{{ field.label }}</label>
-        {{ field }}
-    </div>
+    {% for question in quiz.questions.all %}
+        <div class="question">
+            <p>{{ question.text }}</p>
+            {% if question.question_type == 'MC' %}
+                {% for option in question.options.all %}
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="question_{{ question.id }}" value="{{ option.id }}">
+                        <label class="form-check-label">{{ option.text }}</label>
+                    </div>
+                {% endfor %}
+            {% elif question.question_type == 'TF' %}
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="question_{{ question.id }}" value="True">
+                    <label class="form-check-label">True</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" class="form-check-input" name="question_{{ question.id }}" value="False">
+                    <label class="form-check-label">False</label>
+                </div>
+            {% elif question.question_type == 'SA' %}
+                <textarea class="form-control" name="question_{{ question.id }}" rows="3"></textarea>
+            {% endif %}
+        </div>
     {% endfor %}
     <button type="submit" class="btn btn-primary">Submit Quiz</button>
 </form>
+
 {% endblock %}

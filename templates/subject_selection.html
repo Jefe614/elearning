@@ -1,0 +1,56 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    .subject-card {
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        height: 100%;
+    }
+    .subject-card:hover {
+        transform: translateY(-10px);
+    }
+    .subject-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+    .math-icon { color: #FF6B6B; }
+    .science-icon { color: #4ECDC4; }
+    .english-icon { color: #45B7D1; }
+</style>
+<div class="container mt-5">
+    <h1 class="text-center mb-5">Choose Your Subject</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'subject_quizzes' 'mathematics' %}" class="text-decoration-none">
+                <div class="card subject-card text-center p-4">
+                    <div class="card-body">
+                        <div class="subject-icon math-icon">✖️</div>
+                        <h3 class="card-title">Mathematics</h3>
+                        <p class="card-text">Practice numbers, algebra, geometry and more!</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'subject_quizzes' 'science' %}" class="text-decoration-none">
+                <div class="card subject-card text-center p-4">
+                    <div class="subject-icon science-icon">🔬</div>
+                    <h3 class="card-title">Science</h3>
+                    <p class="card-text">Explore biology, chemistry, and physics!</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'subject_quizzes' 'english' %}" class="text-decoration-none">
+                <div class="card subject-card text-center p-4">
+                    <div class="subject-icon english-icon">📚</div>
+                    <h3 class="card-title">English</h3>
+                    <p class="card-text">Master grammar, vocabulary, and comprehension!</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

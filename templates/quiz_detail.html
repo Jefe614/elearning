@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-body">
+            <h1 class="card-title">{{ quiz.title }}</h1>
+            <p class="card-text text-muted">{{ quiz.description }}</p>
+            <p>
+                <strong>Subject:</strong> {{ quiz.subject|title }} <br>
+                <strong>Grade Level:</strong> Grade {{ quiz.grade_level }} <br>
+                <strong>Number of Questions:</strong> {{ quiz.questions.count }} <br>
+                <strong>Time Limit:</strong> {{ quiz.time_limit }} minutes
+            </p>
+            <a href="{% url 'quiz_attempt' quiz.id %}" class="btn btn-primary">
+                Start Quiz
+            </a>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <h3>Questions in this Quiz</h3>
+    <div class="accordion" id="questionsAccordion">
+        {% for question in quiz.questions.all %}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="heading{{ question.id }}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ question.id }}" aria-expanded="false" aria-controls="collapse{{ question.id }}">
+                    {{ forloop.counter }}. {{ question.text }}
+                </button>
+            </h2>
+            <div id="collapse{{ question.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ question.id }}" data-bs-parent="#questionsAccordion">
+                <div class="accordion-body">
+                    {% if question.question_type == 'MC' %}
+                        <ul>
+                            {% for option in question.options.all %}
+                            <li>{{ option.text }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% elif question.question_type == 'TF' %}
+                        <p>True/False</p>
+                    {% elif question.question_type == 'SA' %}
+                        <p>Short Answer</p>
+                    {% endif %}
+
+                    {% if question.image %}
+                    <img src="{{ question.image.url }}" class="img-fluid mt-3" alt="Question Image">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">No questions available for this quiz.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

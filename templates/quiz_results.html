@@ -1,20 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="card text-center">
-    <div class="card-header">
-        Quiz Results
-    </div>
-    <div class="card-body">
-        <h5 class="card-title">{{ quiz.title }}</h5>
-        <p class="card-text">Your Score: {{ attempt.score|floatformat:2 }}%</p>
-        {% if attempt.score >= 90 %}
-            <div class="alert alert-success">Excellent Work!</div>
-        {% elif attempt.score >= 70 %}
-            <div class="alert alert-info">Good Job!</div>
-        {% else %}
-            <div class="alert alert-warning">Keep Practicing!</div>
-        {% endif %}
+<div class="container mt-5">
+    <div class="card text-center">
+        <div class="card-header">
+            Quiz Results
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ quiz.title }}</h5>
+            <p class="card-text">Your Score: {{ attempt.score|floatformat:2 }}%</p>
+            
+            {% if attempt.score >= 90 %}
+                <div class="alert alert-success">Excellent Work!</div>
+            {% elif attempt.score >= 70 %}
+                <div class="alert alert-info">Good Job!</div>
+            {% else %}
+                <div class="alert alert-warning">Keep Practicing!</div>
+            {% endif %}
+
+            <div class="mt-4">
+                <a href="{% url 'quiz_list' %}" class="btn btn-outline-primary">Back to Quizzes</a>
+                <a href="{% url 'quiz_detail' quiz.id %}" class="btn btn-primary">Review Quiz</a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

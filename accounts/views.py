@@ -2,6 +2,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+
+from quizzes.models import Quiz
 from .forms import UserRegistrationForm, UserLoginForm
 
 def register(request):
@@ -25,7 +27,7 @@ def login_view(request):
             )
             if user:
                 login(request, user)
-                return redirect('quiz_list')
+                return redirect('subject_selection')
     else:
         form = UserLoginForm()
     return render(request, 'login.html', {'form': form})

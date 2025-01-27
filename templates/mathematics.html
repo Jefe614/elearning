@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .quiz-card {
+        transition: transform 0.3s ease;
+    }
+    .quiz-card:hover {
+        transform: scale(1.02);
+    }
+    .difficulty-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Mathematics Quizzes</h1>
+        <a href="{% url 'subject_selection' %}" class="btn btn-outline-primary">
+            ← Back to Subjects
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Static quizzes defined directly in the template -->
+        {% for quiz in quizzes %}
+        <div class="col-md-4 mb-4">
+            <div class="card quiz-card">
+                <div class="card-body">
+                    <span class="badge bg-primary difficulty-badge">
+                        Grade {{ quiz.grade_level }}
+                    </span>
+                    <h5 class="card-title">{{ quiz.title }}</h5>
+                    <p class="card-text">{{ quiz.description }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ quiz.url }}" class="btn btn-primary">
+                            Start Quiz
+                        </a>
+                        <small class="text-muted">
+                            {{ quiz.questions_count }} questions
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                No quizzes available for Mathematics yet. Check back soon!
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
