@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <h2>I am:</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="role" value="student">A Student</button>
+        <button type="submit" name="role" value="teacher">A Teacher</button>
+        <button type="submit" name="role" value="administrator">An Administrator</button>
+    </form>
+</div>
+{% endblock %}

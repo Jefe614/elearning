@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    /* General Page Styling */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Center the card */
+    .card {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    /* Headings */
+    .card h2 {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /* Buttons */
+    .card button {
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 5px;
+        margin: 10px 0;
+        cursor: pointer;
+        color: #fff;
+        background: linear-gradient(45deg, #6a11cb, #2575fc);
+        transition: all 0.3s ease;
+    }
+
+    .card button:hover {
+        background: linear-gradient(45deg, #2575fc, #6a11cb);
+        transform: translateY(-2px);
+    }
+
+    /* Form Inputs */
+    .card input[type="number"],
+    .card input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+        box-sizing: border-box;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    .card input:focus {
+        border-color: #6a11cb;
+        box-shadow: 0 0 5px rgba(106, 17, 203, 0.3);
+    }
+
+    /* Labels */
+    .card label {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+        color: #555;
+        text-align: left;
+    }
+
+    /* Small Text for Additional Notes */
+    .card small {
+        display: block;
+        font-size: 0.8rem;
+        color: #999;
+        margin-top: 15px;
+    }
+</style>
+
+<div class="card">
+    <h2>I plan to use Quizzy for:</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="occupation" value="school">School</button>
+        <button type="submit" name="occupation" value="corporate">Work</button>
+        <button type="submit" name="occupation" value="personal">Personal Use</button>
+    </form>
+</div>
+{% endblock %}

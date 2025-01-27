@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+    <h2>Tell us more about you!</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="age">Select your age:</label>
+        <input type="number" id="age" name="age" min="5" max="100" required>
+        <button type="submit">Submit</button>
+    </form>
+</div>
+{% endblock %}
