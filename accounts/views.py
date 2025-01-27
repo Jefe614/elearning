@@ -37,7 +37,7 @@ def register(request):
         user = User.objects.create_user(username=username, email=email, password=password1)
         user.save()
         messages.success(request, "Registration successful! You can now log in.")
-        return redirect('select_occupation')
+        return redirect('login')
 
     return render(request, 'register.html')
 
@@ -59,7 +59,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('/')
 
 @login_required
 def profile(request):
