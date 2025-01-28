@@ -1,7 +1,7 @@
 # quizzes/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import QuestionOption, Quiz, QuizAttempt, Question
+from .models import QuestionOption, Quiz, QuizAttempt, Question, UserResponse
 from .forms import QuizCreationForm, QuizAttemptForm
 from django.db.models import Avg
 
@@ -92,33 +92,81 @@ def quiz_attempt(request, quiz_id):
     quiz = get_object_or_404(Quiz, id=quiz_id)
     if request.method == 'POST':
         score = 0
+        total_questions = quiz.questions.count()
+        correct_answers = 0
+        user_responses = []  # Store responses temporarily
+
         # Loop through the questions and validate user responses
         for question in quiz.questions.all():
-            selected_option_id = request.POST.get(f"question_{question.id}")
+            answer = request.POST.get(f"question_{question.id}")
+            is_correct = False
+            selected_option = None
+            short_answer_text = None
 
-            if selected_option_id:
-                try:
-                    if question.question_type == 'TF':  # Handling True/False
-                        # Directly check for 'True' or 'False'
-                        if selected_option_id == 'True':
-                            # Check if the question is correct
-                            if question.options.filter(text='True', is_correct=True).exists():
-                                score += 1
-                        elif selected_option_id == 'False':
-                            # Check if the question is correct
-                            if question.options.filter(text='False', is_correct=True).exists():
-                                score += 1
-                    else:
-                        # Handle MC or SA questions as before
-                        selected_option = QuestionOption.objects.get(id=selected_option_id)
+            if answer:
+                if question.question_type == 'SA':
+                    # Handle Short Answer questions
+                    correct_option = question.options.filter(is_correct=True).first()
+                    if correct_option and answer.lower().strip() == correct_option.text.lower().strip():
+                        score += 1
+                        is_correct = True
+                        correct_answers += 1
+                    short_answer_text = answer
+
+                elif question.question_type == 'TF':
+                    # Handle True/False questions
+                    if answer == 'True':
+                        if question.options.filter(text='True', is_correct=True).exists():
+                            score += 1
+                            is_correct = True
+                            correct_answers += 1
+                    elif answer == 'False':
+                        if question.options.filter(text='False', is_correct=True).exists():
+                            score += 1
+                            is_correct = True
+                            correct_answers += 1
+                    selected_option = question.options.filter(text=answer).first()
+
+                else:  # Multiple Choice questions
+                    try:
+                        selected_option = QuestionOption.objects.get(id=int(answer))
                         if selected_option.is_correct:
                             score += 1
-                except QuestionOption.DoesNotExist:
-                    # Handle the case where the selected option is invalid
-                    continue
+                            is_correct = True
+                            correct_answers += 1
+                    except (ValueError, QuestionOption.DoesNotExist):
+                        continue
 
-        # Create a quiz attempt record
-        quiz_attempt = QuizAttempt.objects.create(user=request.user, quiz=quiz, score=score)
-        return redirect('quiz_results', quiz_id=quiz.id)  # Redirect to result or summary page
+            # Store response data
+            user_responses.append({
+                'question': question,
+                'selected_option': selected_option,
+                'short_answer_text': short_answer_text,
+                'is_correct': is_correct
+            })
+
+        # Calculate percentage score
+        percentage_score = (score / total_questions) * 100 if total_questions > 0 else 0
+
+        # Create quiz attempt record
+        quiz_attempt = QuizAttempt.objects.create(
+            user=request.user,
+            quiz=quiz,
+            score=percentage_score,
+            total_questions=total_questions,
+            correct_answers=correct_answers
+        )
+
+        # Create all UserResponse objects after QuizAttempt is created
+        for response in user_responses:
+            UserResponse.objects.create(
+                attempt=quiz_attempt,
+                question=response['question'],
+                selected_option=response['selected_option'],
+                short_answer_text=response['short_answer_text'],
+                is_correct=response['is_correct']
+            )
+
+        return redirect('quiz_results', quiz_id=quiz.id)
 
     return render(request, 'quiz_attempt.html', {'quiz': quiz})
